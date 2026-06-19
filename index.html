@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batch Reference Image Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">AI-style Image Batch Generator</p>
+          <h1>Tạo hàng loạt ảnh mới từ một ảnh tham chiếu</h1>
+          <p class="subtitle">
+            Tải ảnh mẫu, chọn khung hình 16:9 / 1:1 / 9:16, nhập prompt style và xuất nhiều biến thể để tải xuống hàng loạt.
+          </p>
+        </div>
+        <div class="hero-card">
+          <span id="summaryCount">0</span>
+          <small>ảnh sẵn sàng tải</small>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <form id="generatorForm" class="panel controls">
+          <h2>Thiết lập tạo ảnh</h2>
+
+          <label class="upload-box" for="referenceInput">
+            <input id="referenceInput" type="file" accept="image/*" required />
+            <span class="upload-icon">＋</span>
+            <strong>Chọn ảnh tham chiếu</strong>
+            <small>PNG, JPG, WebP. Ảnh sẽ được xử lý trực tiếp trên trình duyệt.</small>
+          </label>
+
+          <div class="preview-wrap hidden" id="referencePreviewWrap">
+            <img id="referencePreview" alt="Ảnh tham chiếu đã tải lên" />
+            <button type="button" id="clearImageBtn">Đổi ảnh</button>
+          </div>
+
+          <label>
+            Prompt style
+            <textarea id="stylePrompt" rows="5" placeholder="Ví dụ: cinematic lighting, pastel colors, product photography, futuristic neon city...">cinematic lighting, high detail, vibrant color grading</textarea>
+          </label>
+
+          <div class="field-grid">
+            <label>
+              Khung hình
+              <select id="aspectRatio">
+                <option value="16:9">16:9 — Landscape</option>
+                <option value="1:1">1:1 — Square</option>
+                <option value="9:16">9:16 — Portrait</option>
+              </select>
+            </label>
+
+            <label>
+              Số lượng ảnh
+              <input id="imageCount" type="number" min="1" max="60" value="12" />
+            </label>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              Độ biến thể
+              <input id="variationStrength" type="range" min="5" max="80" value="35" />
+            </label>
+
+            <label>
+              Prefix tên file
+              <input id="filePrefix" type="text" value="reference-style" maxlength="40" />
+            </label>
+          </div>
+
+          <button class="primary" type="submit">Tạo bộ ảnh</button>
+          <p class="hint">
+            Bản demo tạo biến thể bằng Canvas dựa trên ảnh tham chiếu và prompt. Có thể tích hợp API tạo ảnh thật vào hàm <code>generateVariant</code>.
+          </p>
+        </form>
+
+        <section class="panel output-panel">
+          <div class="toolbar">
+            <div>
+              <h2>Kết quả</h2>
+              <p id="statusText">Chưa có ảnh nào. Hãy tải ảnh tham chiếu và bấm tạo.</p>
+            </div>
+            <div class="actions">
+              <button id="downloadZipBtn" type="button" disabled>Tải ZIP</button>
+              <button id="downloadAllBtn" type="button" disabled>Tải từng ảnh</button>
+            </div>
+          </div>
+
+          <div id="gallery" class="gallery empty-state">
+            <p>Ảnh tạo ra sẽ xuất hiện tại đây.</p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="imageCardTemplate">
+      <article class="image-card">
+        <canvas></canvas>
+        <div class="image-card-footer">
+          <span></span>
+          <button type="button">Tải xuống</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
